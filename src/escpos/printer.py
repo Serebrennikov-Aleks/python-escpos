@@ -189,7 +189,7 @@ class Network(Escpos):
 
     """
 
-    def __init__(self, host, port=9100, timeout=60, *args, **kwargs):
+    def __init__(self, host, port=9100, timeout=60, ip6=False, *args, **kwargs):
         """
 
         :param host:    Printer's hostname or IP address
@@ -200,11 +200,12 @@ class Network(Escpos):
         self.host = host
         self.port = port
         self.timeout = timeout
+        self.ip6 = ip6
         self.open()
 
     def open(self):
         """ Open TCP socket with ``socket``-library and set it as escpos device """
-        self.device = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.device = socket.socket(socket.AF_INET6 if self.ip6 else socket.AF_INET, socket.SOCK_STREAM)
         self.device.settimeout(self.timeout)
         self.device.connect((self.host, self.port))
 
